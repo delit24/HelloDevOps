@@ -66,14 +66,30 @@ A projekt trunk-based development modellt követ:
 
 ## CI/CD
 
-A projekt GitHub Actions-t használ a folyamatos integrációhoz. Minden push és pull request esetén:
-1. Build a .NET alkalmazásból
-2. Docker image készítése
-3. Image publikálása a GitHub Container Registry-be
+A projekt GitHub Actions-t használ a folyamatos integrációhoz és Docker image publikáláshoz.
 
-Image letöltése:
-docker pull ghcr.io/USERNAME/hellodevops:main
-docker run -p 8080:8080 ghcr.io/USERNAME/hellodevops:main
+### Pipeline működése
+
+Minden push vagy pull request esetén automatikusan:
+1. .NET alkalmazás buildelése
+2. Tesztek futtatása
+3. Docker image készítése
+4. Image publikálása a GitHub Container Registry-be
+
+### Docker image használata
+
+A builded image-ek a GitHub Container Registry-ben érhetők el:
+# Image letöltése (cseréld le a USERNAME-et a saját GitHub felhasználónevedre)
+docker pull ghcr.io//hellodevops:main
+
+# Futtatás
+docker run -p 8080:8080 ghcr.io//hellodevops:main
+```
+
+Elérhető tag-ek:
+- `main` - legfrissebb main branch build
+- `<branch-name>` - egyéb branch-ek
+- `main-<commit-sha>` - konkrét commit
 
 
 
