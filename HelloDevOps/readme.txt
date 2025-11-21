@@ -64,32 +64,42 @@ A projekt trunk-based development modellt követ:
 - development/* branchek: új funkciók fejlesztése
 - development branchek merge után azonnal integrálódnak a main-be
 
-## CI/CD
+## CI/CD - Docker Build és Deploy
 
-A projekt GitHub Actions-t használ a folyamatos integrációhoz és Docker image publikáláshoz.
+A projekt Docker image-ei manuális build és deploy folyamattal kerülnek a Docker Hub-ra.
 
-### Pipeline működése
+### Build és Deploy folyamat
 
-Minden push vagy pull request esetén automatikusan:
-1. .NET alkalmazás buildelése
-2. Tesztek futtatása
-3. Docker image készítése
-4. Image publikálása a Docker Hub-ra
+1. **Docker image készítése:
+
+docker build -t delit24/hellodevops:main .
+
+2. **Docker Hub bejelentkezés:**
+docker login -u delit24
+
+3. **Image publikálása Docker Hub-ra:**
+
+docker push delit24/hellodevops:main
+
 
 ### Docker image használata
 
-A builded image-ek a Docker Hub-on érhetők el:
-# Image letöltése
-docker pull tamasdeli/hellodevops:main
+A publikus image letölthető és futtatható:
+```bash
+# Image letöltése Docker Hub-ról
+docker pull delit24/hellodevops:main
 
-# Futtatás
-docker run -p 8080:8080 tamasdeli/hellodevops:main
+# Konténer futtatása
+docker run -d -p 8080:8080 delit24/hellodevops:main
+```
 
-Elérhető tag-ek:
-- `main` - legfrissebb main branch build
-- `<branch-name>` - egyéb branch-ek
-- `main-<commit-sha>` - konkrét commit
+Az alkalmazás elérhető: http://localhost:8080
 
+### Docker Hub repository
+
+Az image publikusan elérhető:
+- Docker Hub: https://hub.docker.com/r/delit24/hellodevops
+- Image név: `delit24/hellodevops:main`
 
 
 HelloDevOps/
