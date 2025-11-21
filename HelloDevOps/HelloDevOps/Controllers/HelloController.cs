@@ -18,7 +18,7 @@ namespace HelloDevOps.Controllers
         {
             return Ok(new
             {
-                message = "Hello DevOps World!",
+                message = "Hello DevOps World! Deli Tamás Neptun kód: L5JUPS",
                 timestamp = DateTime.UtcNow,
                 version = "1.0.0"
             });

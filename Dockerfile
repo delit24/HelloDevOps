@@ -3,12 +3,12 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy csproj and restore dependencies
-COPY ["HelloDevOps/HelloDevOps.csproj", "HelloDevOps/"]
-RUN dotnet restore "HelloDevOps/HelloDevOps.csproj"
+COPY ["HelloDevOps/HelloDevOps/HelloDevOps.csproj", "HelloDevOps/HelloDevOps/"]
+RUN dotnet restore "HelloDevOps/HelloDevOps/HelloDevOps.csproj"
 
 # Copy everything else and build
 COPY . .
-WORKDIR "/src/HelloDevOps"
+WORKDIR "/src/HelloDevOps/HelloDevOps"
 RUN dotnet build "HelloDevOps.csproj" -c Release -o /app/build
 
 # Publish stage
