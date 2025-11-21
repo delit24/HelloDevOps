@@ -74,17 +74,16 @@ Minden push vagy pull request esetén automatikusan:
 1. .NET alkalmazás buildelése
 2. Tesztek futtatása
 3. Docker image készítése
-4. Image publikálása a GitHub Container Registry-be
+4. Image publikálása a Docker Hub-ra
 
 ### Docker image használata
 
-A builded image-ek a GitHub Container Registry-ben érhetők el:
-# Image letöltése (cseréld le a USERNAME-et a saját GitHub felhasználónevedre)
-docker pull ghcr.io//hellodevops:main
+A builded image-ek a Docker Hub-on érhetők el:
+# Image letöltése
+docker pull tamasdeli/hellodevops:main
 
 # Futtatás
-docker run -p 8080:8080 ghcr.io//hellodevops:main
-```
+docker run -p 8080:8080 tamasdeli/hellodevops:main
 
 Elérhető tag-ek:
 - `main` - legfrissebb main branch build
