@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace HelloDevOps.Controllers
 {
@@ -18,7 +18,7 @@ namespace HelloDevOps.Controllers
         {
             return Ok(new
             {
-                message = "Hello DevOps World! Deli Tam�s Neptun k�d: L5JUPS",
+                message = "Hello DevOps World! Deli Tamás, Működik a deploy is !!!!",
                 timestamp = DateTime.UtcNow,
                 version = "1.0.0"
             });
