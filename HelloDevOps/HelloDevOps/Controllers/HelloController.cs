@@ -23,5 +23,26 @@ namespace HelloDevOps.Controllers
                 version = "1.0.0"
             });
         }
+
+        [HttpGet("version")]
+        public IActionResult GetVersion()
+        {
+            return Ok(new
+            {
+                version = "1.0.0",
+                environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production",
+                dotnetVersion = Environment.Version.ToString()
+            });
+        }
+
+        [HttpGet("health")]
+        public IActionResult HealthCheck()
+        {
+            return Ok(new
+            {
+                status = "Healthy",
+                timestamp = DateTime.UtcNow
+            });
+        }
     }
 }
