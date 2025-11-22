@@ -1,47 +1,35 @@
-stages:
-  - build
-  - test
-  - docker
+# A build image, ami tartalmazza a docker klienst
+image: docker:latest
+
+# Ez kell ahhoz, hogy a konténeren belül tudjunk docker parancsokat futtatni (Docker-in-Docker)
+services:
+  - docker:dind
 
 variables:
+  # Opcionális: jobb teljesítményért a docker overlay driver használata
   DOCKER_DRIVER: overlay2
-  IMAGE_NAME: $DOCKER_USERNAME/hellodevops
-  IMAGE_TAG: $CI_COMMIT_REF_NAME
+  # A konkrét image név, amit használni fogunk (a felhasználóneveddel)
+  DOCKER_IMAGE_NAME: delit24/hellodevops
 
-build:
-  stage: build
-  image: mcr.microsoft.com/dotnet/sdk:8.0
-  script:
-    - dotnet restore HelloDevOps.sln
-    - dotnet build HelloDevOps.sln --configuration Release --no-restore
-  artifacts:
-    paths:
-      - HelloDevOps/bin/Release/
-    expire_in: 1 hour
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+stages:
+  - build_and_push
 
-test:
-  stage: test
-  image: mcr.microsoft.com/dotnet/sdk:8.0
-  script:
-    - dotnet test HelloDevOps.sln --configuration Release --no-build --verbosity normal
-  dependencies:
-    - build
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-
-docker-build:
-  stage: docker
-  image: docker:latest
-  services:
-    - docker:dind
+docker-deploy:
+  stage: build_and_push
+  # Csak akkor fusson, ha a main branchre pusholsz (ahogy kérted)
+  only:
+    - main
   before_script:
-    - echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    # Bejelentkezés a Docker Hub-ra a GitLab változók segítségével (Lásd lentebb a 3. pontot!)
+    - docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD"
   script:
-    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
-    - docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
-    - docker push $IMAGE_NAME:$IMAGE_TAG
-    - docker push $IMAGE_NAME:latest
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    # 1. Buildelés (ugyanaz, mint amit kézzel írtál, csak automatizálva)
+    # A "latest" tag mellett érdemes a commit hash-t is használni verziózásra, vagy a GitLab pipeline ID-t.
+    - docker build -t $DOCKER_IMAGE_NAME:latest .
+    
+    # 2. Pusholás a Docker Hub-ra
+    - docker push $DOCKER_IMAGE_NAME:latest
+    
+    # (Opcionális) Ha verziózni is akarod minden egyes buildet:
+    # - docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$CI_PIPELINE_IID
+    # - docker push $DOCKER_IMAGE_NAME:$CI_PIPELINE_IID
