@@ -22,7 +22,7 @@ namespace HelloDevOps.Controllers
         {
             return Ok(new
             {
-                message = "Hello DevOps World! Deli Tamás, Működik a deploy is már automatizalva gitlab-on keresztül !!!!",
+                message = "Hello DevOps World! Deli Tamás, Működik a deploy is már automatizalva gitlab-on keresztül !",
                 timestamp = DateTime.UtcNow,
                 version = "1.0.0"
             });
