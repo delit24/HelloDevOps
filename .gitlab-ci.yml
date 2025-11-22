@@ -12,8 +12,8 @@ build:
   stage: build
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
-    - dotnet restore
-    - dotnet build --configuration Release --no-restore
+    - dotnet restore HelloDevOps.sln
+    - dotnet build HelloDevOps.sln --configuration Release --no-restore
   artifacts:
     paths:
       - HelloDevOps/bin/Release/
@@ -25,7 +25,7 @@ test:
   stage: test
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
-    - dotnet test --configuration Release --no-build --verbosity normal
+    - dotnet test HelloDevOps.sln --configuration Release --no-build --verbosity normal
   dependencies:
     - build
   rules:
