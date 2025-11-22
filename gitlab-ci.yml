@@ -1,0 +1,26 @@
+# A legfrissebb docker image-et használjuk a build folyamat vezérlésére
+image: docker:latest
+
+# A Docker-in-Docker szolgáltatás, hogy tudjunk image-et építeni a konténeren belül
+services:
+  - docker:dind
+
+stages:
+  - build_and_push
+
+docker-deploy:
+  stage: build_and_push
+  # Csak a main ágra futtatjuk, ahogy kérted
+  only:
+    - main
+  before_script:
+    # Itt használjuk a beállított változóidat a belépéshez
+    # A képed alapján: DOCKER_USERNAME és DOCKER_TOKEN
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_TOKEN"
+  script:
+    # Ez a parancs felépíti az image-et a Dockerfile alapján
+    # A "build ." azt feltételezi, hogy a Dockerfile a gyökérkönyvtárban van
+    - docker build -t delit24/hellodevops:latest .
+    
+    # Ez feltolja a Docker Hub-ra
+    - docker push delit24/hellodevops:latest
